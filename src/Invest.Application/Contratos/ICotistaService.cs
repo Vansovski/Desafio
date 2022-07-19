@@ -1,3 +1,4 @@
+using Invest.Application.DTOS;
 using Invest.Domain;
 
 namespace Invest.Application.Contratos
@@ -8,7 +9,7 @@ namespace Invest.Application.Contratos
         Task<Cotista> AddCotista(Cotista operacao);
          
         //Obtem todos os Cotistas
-        Task<Cotista[]> GetAllCotistasAsync();
+        Task<List<CotistaDto>> GetAllCotistasAsync();
         //Obtem Cotista pelo Id 
         Task<Cotista> GetCotistaByIdAsync(int CotaId);
     }
