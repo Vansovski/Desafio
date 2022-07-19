@@ -1,6 +1,7 @@
 using Invest.Persistence;
 using Invest.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Invest.Persistence.Context;
 
 namespace Invest.API.Controllers;
 

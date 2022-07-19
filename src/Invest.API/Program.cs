@@ -1,4 +1,6 @@
 using Invest.Persistence;
+using Invest.Persistence.Context;
+using Invest.Persistence.Contratos;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<InvestContext>(
     context => context.UseSqlite(builder.Configuration.GetConnectionString("Default"))
 );
+
+//Injeção de Dependica
+builder.Services.AddScoped<IOperacaoPersistence,OperacaoPersistence>(); //Operações
+builder.Services.AddScoped<ICotistaPersistence,CotistaPersistence>(); //Operações
 
 
 builder.Services.AddControllers();

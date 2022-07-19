@@ -1,7 +1,7 @@
 using Invest.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Invest.Persistence
+namespace Invest.Persistence.Context
 {
     public class InvestContext: DbContext
     {
