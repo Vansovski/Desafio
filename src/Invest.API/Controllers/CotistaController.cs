@@ -1,7 +1,7 @@
 using Invest.Persistence;
 using Invest.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Invest.Persistence.Context;
+using Invest.Application.Contratos;
 
 namespace Invest.API.Controllers;
 
@@ -10,40 +10,78 @@ namespace Invest.API.Controllers;
 public class CotistaController : ControllerBase
 {  
     //Injeção de dependecia DataContex
-    private readonly InvestContext _context;
+    private readonly ICotistaService  _cotistaService;
 
     //Contrutor da API de Cotistas, 
-    public CotistaController(InvestContext context)
+    public CotistaController(ICotistaService cotistaService)
     {
-       _context = context;
+       _cotistaService = cotistaService;
     }
 
     //Obtem todos os Cotistas
     [HttpGet]
-    public IEnumerable<Cotista> Get()
+    public async Task<IActionResult> Get()
     {
-        return _context.Cotistas;
+        try
+        {
+            //Obtem todos os Cotistas
+            var cotistas = await _cotistaService.GetAllCotistasAsync();
+            //Verifica o resultado da busca 
+            if(cotistas == null) return NotFound("Não existe nenhum Cotista Registrado");
+
+            return Ok(cotistas);            
+            
+        }
+        catch (System.Exception ex)
+        {
+            //Tratamento de exceção
+            return this.StatusCode(StatusCodes.Status500InternalServerError,
+                                        $"Erro ao recuperar Cotistas. Erro {ex}");
+        }
     }
 
     //Obtem Cotista pelo Id 
     [HttpGet("{id}")]
-    public Cotista Get(int id)
+    public async Task<IActionResult> Get(int id)
     {
-        //Obtem Cotista 
-        var cotista = _context.Cotistas.SingleOrDefault(cot => cot.Id == id);
-        //Se existir cotista com id retorna 
-        return (cotista != null) ? cotista: null;
+        try
+        {
+            //Obtem Cotista
+            var cotista = _cotistaService.GetCotistaByIdAsync(id);
+            if (cotista == null) return NotFound("Cotista não encontrado");
+
+            //retorno com Cotista
+            return Ok(cotista);
+            
+        }
+        catch (System.Exception ex)
+        {
+          //Tratamento de exceção
+            return this.StatusCode(StatusCodes.Status500InternalServerError,
+                                        $"Erro ao recuperar Cotistas. Erro {ex}");
+        }
     }
 
     //Cadastra um novo Cotista 
     [HttpPost]
-    public IEnumerable<Cotista> Post(Cotista cotista)
+    public async Task<IActionResult> Post(Cotista cotista)
     {
-        //Insere cotista 
-        _context.Add(cotista);
-        _context.SaveChanges();
-        //retorna todos os cotistas
-        var cotistas = _context.Cotistas.ToList();
-        return cotistas ;
+        try
+        {
+            //Insere o Cotista
+            var _cotista = await _cotistaService.AddCotista(cotista);
+
+            //verifica se houve algum erro ao registrar Cotista
+            if(_cotista == null) return BadRequest("Erro ao Adicionar Cotista");
+
+            return Ok(_cotista);
+
+        }
+        catch (System.Exception ex)
+        {
+          //Tratamento de exceção
+            return this.StatusCode(StatusCodes.Status500InternalServerError,
+                                        $"Erro ao Registrar Cotistas. Erro {ex}");
+        }
     }
 }

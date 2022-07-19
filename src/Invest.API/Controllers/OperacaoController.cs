@@ -2,46 +2,90 @@ using Invest.Persistence;
 using Invest.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Invest.Persistence.Context;
+using Invest.Application.Contratos;
 
 namespace Invest.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class OperacaoController : ControllerBase
-{  
+{
     //Injeção de dependencia 
-    private readonly InvestContext _context;
+    private readonly IOperacaoService _operacaoService;
     //Contrutor da API das operações 
-    public OperacaoController(InvestContext context)
+    public OperacaoController(IOperacaoService operacaoService)
     {
-       _context = context;
+        _operacaoService = operacaoService;
     }
 
     //Obtem todas as Operações 
     [HttpGet]
-    public IEnumerable<Operacao> Get()
+    public async Task<IActionResult> Get()
     {
         //Lista de Operações 
-        return _context.Operacoes.ToList();
+        try
+        {
+            //Obtem todas as Operaçoes 
+            var operacoes = await _operacaoService.GetAllOperacoesAsync();
+            //Verifica o resultado da busca 
+            if (operacoes == null) return NotFound("Não existe nenhuma Operação!");
+
+            return Ok(operacoes);
+
+        }
+        catch (System.Exception ex)
+        {
+            //Tratamento de exceção
+            return this.StatusCode(StatusCodes.Status500InternalServerError,
+                                        $"Erro ao recuperar Operações. Erro {ex}");
+        }
     }
+
 
     //Obtem operação pelo Id
     [HttpGet("{id}")]
-    public Operacao Get(int id)
+    public async Task<IActionResult> Get(int id)
     {
         //Obtem a operação dado o Id 
-        var op = _context.Operacoes.FirstOrDefault(op => op.Id == id);
-        return op;
+        try
+        {
+            //Obtem a Operação 
+            var operacoes = await _operacaoService.GetOperacaoByIdAsync(id);
+            //Verifica o resultado da busca 
+            if (operacoes == null) return NotFound("Não existe esta Operação!");
+
+            return Ok(operacoes);
+        }
+        catch (System.Exception ex)
+        {
+            //Tratamento de exceção
+            return this.StatusCode(StatusCodes.Status500InternalServerError,
+                                        $"Erro ao obter  a Operção. Erro {ex}");
+        }
     }
 
     //Registra um nova Operação Compra ou Venda
     [HttpPost]
-    public IEnumerable<Operacao> Post(Operacao operacao)
+    public async Task<IActionResult> Post(Operacao operacao)
     {
         //Adicona nova operação 
-        _context.Add(operacao);
-        _context.SaveChanges();
-        return _context.Operacoes.ToList();
+        try
+        {
+            //Insere o Cotista
+            var _cotista = await _operacaoService.AddOperacao(operacao);
+
+            //verifica se houve algum erro ao registrar Cotista
+            if(_cotista == null) return BadRequest("Erro ao Adicionar Cotista");
+
+            return Ok(_cotista);
+
+        }
+        catch (System.Exception ex)
+        {
+            //Tratamento de exceção
+            return this.StatusCode(StatusCodes.Status500InternalServerError,
+                                        $"Erro ao adcionar Operação. Erro {ex}");
+        }
     }
 
 }
