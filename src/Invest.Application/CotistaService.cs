@@ -36,8 +36,8 @@ namespace Invest.Application
             }
         }
 
-        //Obtem todos os Cotistas
-        public async Task<List<CotistaDto>> GetAllCotistasAsync()
+        //Obtem todos os Cotistas com as informações de retorno e verifica saldo de Cotas
+        public async Task<List<CotistaConsultaDto>> GetAllCotistasAsync()
         {
             try
             {
@@ -47,12 +47,12 @@ namespace Invest.Application
                 //Verifica conteudo do retorno 
                 if(cotistas == null) return null;
 
-                var cotistaRetorno = new List<CotistaDto>();
+                var cotistaRetorno = new List<CotistaConsultaDto>();
 
                 foreach (var item in cotistas)
                 {
                     //Adiciona ao retorno 
-                    cotistaRetorno.Add(new CotistaDto(){
+                    cotistaRetorno.Add(new CotistaConsultaDto(){
                         Id = item.Id,
                         Nome = item.Nome,
                         DataNascimento = item.DataNascimento,
@@ -91,7 +91,7 @@ namespace Invest.Application
         }
 
 
-        //Saldo de Cotas
+        //Calcula Saldo de Cotas dado conjunto de Operções
         public int SaldoCotas(IEnumerable<Operacao> operacoes)
         {
             if(operacoes.Count() == 0)

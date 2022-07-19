@@ -19,7 +19,7 @@ namespace Invest.Persistence
         public async Task<Operacao[]> GetAllOperacoesAsync()
         {
             //Query para obter todas as operções inclui o Cotista da operção
-            IQueryable<Operacao> query = _context.Operacoes.Include(op => op.Cotista);
+            IQueryable<Operacao> query = _context.Operacoes;
 
             //Ordena pelo Id da Operção
             query = query.OrderBy(op => op.Id);
@@ -31,7 +31,7 @@ namespace Invest.Persistence
         public async Task<Operacao> GetOperacaoByIdAsync(int OperacaoId)
         {
             //Query para obter todas as operções inclui o Cotista da operção
-            IQueryable<Operacao> query = _context.Operacoes.Include(op => op.Cotista);
+            IQueryable<Operacao> query = _context.Operacoes;
 
             //Obtem Operação pelo Id 
             query = query.OrderBy(op => op.Id)

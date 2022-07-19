@@ -1,3 +1,4 @@
+using Invest.Application.DTOS;
 using Invest.Domain;
 
 namespace Invest.Application.Contratos
@@ -5,13 +6,12 @@ namespace Invest.Application.Contratos
     public interface IOperacaoService
     {
         //Adicona uma nova operacao
-        Task<Operacao> AddOperacao(Operacao operacao);
-
+        Task<Operacao> AddOperacao(OperacaoRegisterDto operacaoRegister);
 
         //Obtem todas as Operções
-        Task<Operacao[]> GetAllOperacoesAsync();
+        Task<List<OperacaoConsultaDto>> GetAllOperacoesAsync();
 
         //Obtem Operacao pelo Id 
-        Task<Operacao> GetOperacaoByIdAsync(int OperacaoId);
+        Task<OperacaoConsultaDto> GetOperacaoByIdAsync(int OperacaoId);
     }
 }

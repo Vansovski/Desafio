@@ -2,6 +2,7 @@ using Invest.Persistence;
 using Invest.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Invest.Application.Contratos;
+using Invest.Application.DTOS;
 
 namespace Invest.API.Controllers;
 
@@ -47,7 +48,7 @@ public class CotistaController : ControllerBase
         try
         {
             //Obtem Cotista
-            var cotista = _cotistaService.GetCotistaByIdAsync(id);
+            var cotista = await _cotistaService.GetCotistaByIdAsync(id);
             if (cotista == null) return NotFound("Cotista não encontrado");
 
             //retorno com Cotista
@@ -64,17 +65,24 @@ public class CotistaController : ControllerBase
 
     //Cadastra um novo Cotista 
     [HttpPost]
-    public async Task<IActionResult> Post(Cotista cotista)
+    public async Task<IActionResult> Post(CotistaRegisterDto cotista)
     {
         try
         {
+            //Mapeamento de cmapos 
+            var _cotista = new Cotista {
+                Nome = cotista.Nome,
+                DataNascimento = cotista.DataNascimento,
+                Cpf = cotista.Cpf
+            };
+            
             //Insere o Cotista
-            var _cotista = await _cotistaService.AddCotista(cotista);
+            var cotistaRetorno = await _cotistaService.AddCotista(_cotista);
 
             //verifica se houve algum erro ao registrar Cotista
-            if(_cotista == null) return BadRequest("Erro ao Adicionar Cotista");
+            if(cotistaRetorno == null) return BadRequest("Erro ao Adicionar Cotista");
 
-            return Ok(_cotista);
+            return Ok(cotistaRetorno);
 
         }
         catch (System.Exception ex)

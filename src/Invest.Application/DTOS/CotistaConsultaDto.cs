@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Invest.Application.DTOS
 {
-    public class CotistaDto
+    public class CotistaConsultaDto
     {
         public int Id { get; set; }
 

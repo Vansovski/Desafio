@@ -1,4 +1,5 @@
 using Invest.Application.Contratos;
+using Invest.Application.DTOS;
 using Invest.Domain;
 using Invest.Persistence.Contratos;
 
@@ -13,10 +14,22 @@ namespace Invest.Application
         {
             _operacaoPersistence = operacaoPersistence;
         }
-        public async Task<Operacao> AddOperacao(Operacao operacao)
+        public async Task<Operacao> AddOperacao(OperacaoRegisterDto operacaoRegister)
         {
             try
             {
+                //variável critica a ser processada 
+                var dataAtual = DateTime.Now;
+                //Mapeamento da Operação
+                var operacao = new Operacao{
+                    CotistaId = operacaoRegister.CotistaId,
+                    //Formato da data
+                    DataOperacao = dataAtual.ToString("yyyy-MM-ddTHH:mm:ss.fffffff"),
+                    TipoOperacao = operacaoRegister.TipoOperacao,
+                    QtdCotas = operacaoRegister.QtdCotas,
+                    ValorCota = valorCota(dataAtual)
+                };
+                
                 //Adicona nova Operação 
                 _operacaoPersistence.Add<Operacao>(operacao);
 
@@ -27,7 +40,6 @@ namespace Invest.Application
                 }
                 
                 return null;
-                
             }
             catch (System.Exception ex)
             {
@@ -35,16 +47,33 @@ namespace Invest.Application
             }
         }
 
-        public Task<Operacao[]> GetAllOperacoesAsync()
+        public async Task<List<OperacaoConsultaDto>> GetAllOperacoesAsync()
         {
             try
             {
-                var operacoes = _operacaoPersistence.GetAllOperacoesAsync();
+                var operacoes = await _operacaoPersistence.GetAllOperacoesAsync();
                 //Verifica conteudo do retorno 
                 if(operacoes == null) return null;
 
+                //Lista de OperaçõesDto 
+                List<OperacaoConsultaDto> _operacoes = new List<OperacaoConsultaDto>();
+
+                //Mapeamento de Operações
+                foreach(var op in operacoes)
+                {
+                    //adiciona elemento e faz mapeamento para DTO 
+                    _operacoes.Add(new OperacaoConsultaDto{
+                        Id = op.Id,
+                        CotistaId = op.CotistaId,
+                        DataOperacao = op.DataOperacao,
+                        Operacao = op.TipoOperacao,
+                        Cotas = op.QtdCotas,
+                        valorCota = op.ValorCota
+                    });
+                }
+
                 //Retorna todas as operações do Fundo 
-                return operacoes;
+                return _operacoes;
             }
             catch (System.Exception ex)
             {
@@ -52,23 +81,45 @@ namespace Invest.Application
             }
         }
 
-        public async Task<Operacao> GetOperacaoByIdAsync(int OperacaoId)
+        public async Task<OperacaoConsultaDto> GetOperacaoByIdAsync(int OperacaoId)
         {
             try
             {
-                //Obtem 
-                var cotista = await _operacaoPersistence.GetOperacaoByIdAsync(OperacaoId);
-                
-                //Verifica conteudo do retorno 
-                if(cotista == null) return null;
+                //Obtem Operçao dado o Id 
+                var op = await _operacaoPersistence.GetOperacaoByIdAsync(OperacaoId);
 
-                //Retorna cotista do Fundo 
-                return cotista;
+                //Verifica conteudo do retorno 
+                if(op == null) return null;
+
+                //Mapeamento para DTO
+                var _operacaoDto = new OperacaoConsultaDto{
+                        Id = op.Id,
+                        CotistaId = op.CotistaId,
+                        DataOperacao = op.DataOperacao,
+                        Operacao = op.TipoOperacao,
+                        Cotas = op.QtdCotas,
+                        valorCota = op.ValorCota
+                    };
+
+                
+                //Retorna operação do Fundo 
+                return _operacaoDto;
             }
             catch (System.Exception ex)
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        //Calculo do valor da Cota 
+        public double valorCota(DateTime data)
+        {
+            //Regra de negocio 
+            var valorCota = 120.00 + Math.Log(data.Minute + 1,2) 
+                                   - Math.Log(data.Second + 1,3);
+
+            //valor arredondado 
+            return Math.Round(valorCota,2);
         }
     }
 }

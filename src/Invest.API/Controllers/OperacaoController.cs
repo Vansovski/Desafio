@@ -1,6 +1,6 @@
-using Invest.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Invest.Application.Contratos;
+using Invest.Application.DTOS;
 
 namespace Invest.API.Controllers;
 
@@ -64,18 +64,18 @@ public class OperacaoController : ControllerBase
 
     //Registra um nova Operação Compra ou Venda
     [HttpPost]
-    public async Task<IActionResult> Post(Operacao operacao)
+    public async Task<IActionResult> Post(OperacaoRegisterDto operacaoRegister)
     {
         //Adicona nova operação 
         try
         {
-            //Insere o Cotista
-            var _cotista = await _operacaoService.AddOperacao(operacao);
+            //Insere a Operacao
+            var _operacao = await _operacaoService.AddOperacao(operacaoRegister);
 
-            //verifica se houve algum erro ao registrar Cotista
-            if(_cotista == null) return BadRequest("Erro ao Adicionar Cotista");
+            //verifica se houve algum erro ao registrar a Operação
+            if(_operacao == null) return BadRequest("Erro ao Adicionar Operação");
 
-            return Ok(_cotista);
+            return Ok(_operacao);
 
         }
         catch (System.Exception ex)
