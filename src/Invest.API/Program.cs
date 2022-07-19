@@ -1,3 +1,5 @@
+using Invest.Application;
+using Invest.Application.Contratos;
 using Invest.Persistence;
 using Invest.Persistence.Context;
 using Invest.Persistence.Contratos;
@@ -12,9 +14,13 @@ builder.Services.AddDbContext<InvestContext>(
     context => context.UseSqlite(builder.Configuration.GetConnectionString("Default"))
 );
 
-//Injeção de Dependica
+//Injeção de Dependencia Persistencia
 builder.Services.AddScoped<IOperacaoPersistence,OperacaoPersistence>(); //Operações
-builder.Services.AddScoped<ICotistaPersistence,CotistaPersistence>(); //Operações
+builder.Services.AddScoped<ICotistaPersistence,CotistaPersistence>(); //Cotista
+
+//Injeção de Dependencia Servico
+builder.Services.AddScoped<ICotistaService,CotistaService>(); //Cotista
+builder.Services.AddScoped<IOperacaoService,OperacaoService>(); //Operações
 
 
 builder.Services.AddControllers();

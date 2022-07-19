@@ -1,13 +1,15 @@
 using Invest.Domain;
 
-namespace Invest.Persistence.Contratos
+namespace Invest.Application.Contratos
 {
-    public interface ICotistaPersistence: IPersistence
+    public interface ICotistaService
     {
+        //Registrar Cotista
+        Task<Cotista> AddCotista(Cotista operacao);
+         
         //Obtem todos os Cotistas
         Task<Cotista[]> GetAllCotistasAsync();
         //Obtem Cotista pelo Id 
         Task<Cotista> GetCotistaByIdAsync(int CotaId);
-         
     }
 }

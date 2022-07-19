@@ -29,7 +29,7 @@ namespace Invest.Persistence
             return await query.ToArrayAsync();
         }
 
-        public async Task<Cotista> GetCotistaAsync(int CotistaId)
+        public async Task<Cotista> GetCotistaByIdAsync(int CotistaId)
         {
             //Query para obter todos os Cotistas
             IQueryable<Cotista> query = _context.Cotistas.Include(cotista => cotista.Operacoes);
