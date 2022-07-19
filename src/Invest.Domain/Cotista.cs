@@ -1,4 +1,4 @@
-namespace Invest.API.Models
+namespace Invest.Domain
 {
     public class Cotista
     {
@@ -8,7 +8,9 @@ namespace Invest.API.Models
 
         public DateTime DataNascimento { get; set; }
 
-        public string Cpf { get; set; }             
+        public string Cpf { get; set; }
+
+        public IEnumerable<Operacao> Operacoes { get; set; }
         
     }
 }

@@ -1,4 +1,5 @@
-using Invest.API.Models;
+using Invest.Persistence;
+using Invest.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Invest.API.Controllers;
@@ -7,32 +8,39 @@ namespace Invest.API.Controllers;
 [Route("api/[controller]")]
 public class OperacaoController : ControllerBase
 {  
+    //Injeção de dependencia 
+    private readonly InvestContext _context;
     //Contrutor da API das operações 
-    public OperacaoController()
+    public OperacaoController(InvestContext context)
     {
-       
+       _context = context;
     }
-
 
     //Obtem todas as Operações 
     [HttpGet]
-    public string Get()
+    public IEnumerable<Operacao> Get()
     {
-        return "Retorno";
+        //Lista de Operações 
+        return _context.Operacoes.ToList();
     }
 
     //Obtem operação pelo Id
     [HttpGet("{id}")]
-    public string Get(int id)
+    public Operacao Get(int id)
     {
-        return "Retorno";
+        //Obtem a operação dado o Id 
+        var op = _context.Operacoes.FirstOrDefault(op => op.Id == id);
+        return op;
     }
 
     //Registra um nova Operação Compra ou Venda
     [HttpPost]
-    public string Post()
+    public IEnumerable<Operacao> Post(Operacao operacao)
     {
-        return "Retorno";
+        //Adicona nova operação 
+        _context.Add(operacao);
+        _context.SaveChanges();
+        return _context.Operacoes.ToList();
     }
 
 }

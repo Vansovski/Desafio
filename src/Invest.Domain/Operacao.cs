@@ -1,4 +1,4 @@
-namespace Invest.API.Models
+namespace Invest.Domain
 {
     public class Operacao
     {

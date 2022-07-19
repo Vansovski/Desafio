@@ -1,5 +1,5 @@
-using Invest.API.Data;
-using Invest.API.Models;
+using Invest.Persistence;
+using Invest.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Invest.API.Controllers;
@@ -9,10 +9,10 @@ namespace Invest.API.Controllers;
 public class CotistaController : ControllerBase
 {  
     //Injeção de dependecia DataContex
-    private readonly DataContext _context;
+    private readonly InvestContext _context;
 
     //Contrutor da API de Cotistas, 
-    public CotistaController(DataContext context)
+    public CotistaController(InvestContext context)
     {
        _context = context;
     }
