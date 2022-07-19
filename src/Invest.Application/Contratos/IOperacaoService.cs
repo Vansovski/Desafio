@@ -6,7 +6,7 @@ namespace Invest.Application.Contratos
     public interface IOperacaoService
     {
         //Adicona uma nova operacao
-        Task<Operacao> AddOperacao(OperacaoRegisterDto operacaoRegister);
+        Task<OperacaoConsultaDto> AddOperacao(OperacaoRegisterDto operacaoRegister);
 
         //Obtem todas as Operções
         Task<List<OperacaoConsultaDto>> GetAllOperacoesAsync();

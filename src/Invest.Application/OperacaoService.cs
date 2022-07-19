@@ -9,15 +9,22 @@ namespace Invest.Application
     {
          //Injeção de depencia 
         private readonly IOperacaoPersistence _operacaoPersistence;
+        private readonly ICotistaService _cotistaService;
         //Construtor do serviço de Cotistas 
-        public OperacaoService(IOperacaoPersistence operacaoPersistence)
+        public OperacaoService(IOperacaoPersistence operacaoPersistence, 
+                               ICotistaService cotistaService)
         {
             _operacaoPersistence = operacaoPersistence;
+            _cotistaService = cotistaService;
         }
-        public async Task<Operacao> AddOperacao(OperacaoRegisterDto operacaoRegister)
+        public async Task<OperacaoConsultaDto> AddOperacao(OperacaoRegisterDto operacaoRegister)
         {
             try
             {
+                //Verifica se Cotista existe para inserir operacao
+                var cotista = await _cotistaService.GetCotistaByIdAsync(operacaoRegister.CotistaId);
+                if(cotista == null) return null;
+
                 //variável critica a ser processada 
                 var dataAtual = DateTime.Now;
                 //Mapeamento da Operação
@@ -26,7 +33,7 @@ namespace Invest.Application
                     //Formato da data
                     DataOperacao = dataAtual.ToString("yyyy-MM-ddTHH:mm:ss.fffffff"),
                     TipoOperacao = operacaoRegister.TipoOperacao,
-                    QtdCotas = operacaoRegister.QtdCotas,
+                    QtdCotas = operacaoRegister.Cotas,
                     ValorCota = valorCota(dataAtual)
                 };
                 
@@ -36,7 +43,7 @@ namespace Invest.Application
                 //Verifica se foi salvo no contexto
                 if (await _operacaoPersistence.SaveChangesAsync())
                 {
-                    return await _operacaoPersistence.GetOperacaoByIdAsync(operacao.Id);
+                    return await GetOperacaoByIdAsync(operacao.Id);
                 }
                 
                 return null;
@@ -100,7 +107,6 @@ namespace Invest.Application
                         Cotas = op.QtdCotas,
                         valorCota = op.ValorCota
                     };
-
                 
                 //Retorna operação do Fundo 
                 return _operacaoDto;

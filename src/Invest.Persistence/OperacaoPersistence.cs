@@ -37,7 +37,6 @@ namespace Invest.Persistence
             query = query.OrderBy(op => op.Id)
                          .Where(op => op.Id == OperacaoId);
 
-
             return await query.FirstOrDefaultAsync();
         }
     }

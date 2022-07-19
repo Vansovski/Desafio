@@ -29,6 +29,7 @@ namespace Invest.Persistence
             return await query.ToArrayAsync();
         }
 
+        //Obtem por Id
         public async Task<Cotista> GetCotistaByIdAsync(int CotistaId)
         {
             //Query para obter todos os Cotistas
@@ -41,5 +42,18 @@ namespace Invest.Persistence
 
             return await query.FirstOrDefaultAsync();
         }
+        
+        //Obtem por CPF
+        public async Task<Cotista> GetCotistaByCpfAsync(string cpf)
+        {
+            //Query para obter todos os Cotistas
+            IQueryable<Cotista> query = _context.Cotistas.
+                                            OrderBy(ct => ct.Id)
+                                            .Where(ct => ct.Cpf == cpf);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+
     }
 }

@@ -73,7 +73,7 @@ public class OperacaoController : ControllerBase
             var _operacao = await _operacaoService.AddOperacao(operacaoRegister);
 
             //verifica se houve algum erro ao registrar a Operação
-            if(_operacao == null) return BadRequest("Erro ao Adicionar Operação");
+            if(_operacao == null) return BadRequest(new {Message = "Erro ao Adicionar Operação, Cotista Inválido!"});
 
             return Ok(_operacao);
 

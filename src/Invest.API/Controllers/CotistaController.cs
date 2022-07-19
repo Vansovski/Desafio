@@ -80,7 +80,7 @@ public class CotistaController : ControllerBase
             var cotistaRetorno = await _cotistaService.AddCotista(_cotista);
 
             //verifica se houve algum erro ao registrar Cotista
-            if(cotistaRetorno == null) return BadRequest("Erro ao Adicionar Cotista");
+            if(cotistaRetorno == null) return BadRequest("Erro ao Registrar Cotista, CPF já cadstrado");
 
             return Ok(cotistaRetorno);
 

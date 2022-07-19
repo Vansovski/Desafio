@@ -5,14 +5,14 @@ namespace Invest.Application.DTOS
     public class OperacaoRegisterDto
     {
 
-        [Required]
+        [Required(ErrorMessage ="Id do cotista é um campo Obrigatório!")]
         public int CotistaId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="A operação Compra/Venda deve ser informada!")]
         public int TipoOperacao { get; set; }
         
-        [Required]
-        public int QtdCotas { get; set; }
+        [Required(ErrorMessage ="Quantidade de cotas de ser um numero inteiro, maior que 0!")]
+        public int Cotas { get; set; }
         
     }
 }

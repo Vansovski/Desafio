@@ -16,16 +16,20 @@ namespace Invest.Application
         }
 
         //Registra Cotista
-        public async Task<Cotista> AddCotista(Cotista cotista)
+        public async Task<CotistaConsultaDto> AddCotista(Cotista cotista)
         {
             try
             {
+                //Verifica se o Cotista já existe 
+                var cotistaExiste = await _cotistaPersistence.GetCotistaByCpfAsync(cotista.Cpf);
+                if(cotistaExiste != null) return null;
+
                 //Adiciona Cotista
                 _cotistaPersistence.Add<Cotista>(cotista);
                 //Verifica se foi salvo no contexto
                 if (await _cotistaPersistence.SaveChangesAsync())
                 {
-                    return await _cotistaPersistence.GetCotistaByIdAsync(cotista.Id);
+                    return await GetCotistaByIdAsync(cotista.Id);
                 }
                 
                 return null;
@@ -71,18 +75,27 @@ namespace Invest.Application
             }
         }
 
-        public async Task<Cotista> GetCotistaByIdAsync(int CotaId)
+        public async Task<CotistaConsultaDto> GetCotistaByIdAsync(int CotaId)
         {
             try
             {
-                //Obtem 
+                //Obtem cotista do Banco de Dados
                 var cotista = await _cotistaPersistence.GetCotistaByIdAsync(CotaId);
                 
                 //Verifica conteudo do retorno 
                 if(cotista == null) return null;
 
+                //Retorno DTO do Cotista
+                CotistaConsultaDto _cotistaRet = new CotistaConsultaDto(){
+                    Id = cotista.Id,
+                    Nome = cotista.Nome,
+                    DataNascimento = cotista.DataNascimento,
+                    Cpf = cotista.Cpf,
+                    QtdCotas = SaldoCotas(cotista.Operacoes)
+                    };
+
                 //Retorna cotista do Fundo 
-                return cotista;
+                return _cotistaRet;
             }
             catch (System.Exception ex)
             {
