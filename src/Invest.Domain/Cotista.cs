@@ -10,7 +10,7 @@ namespace Invest.Domain
 
         public string Cpf { get; set; }
 
-        public IEnumerable<Operacao> Operacoes { get; set; }
+        public IEnumerable<Operacao>? Operacoes { get; set; }
         
     }
 }

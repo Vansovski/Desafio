@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Invest.Application;
 using Invest.Application.Contratos;
 using Invest.Persistence;
@@ -8,6 +9,13 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//Solução de loop de referencia 
+builder.Services.AddControllers()
+                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+                .AddNewtonsoftJson(
+                    x => x.SerializerSettings.ReferenceLoopHandling = 
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
 
 //Referencia do banco de Dados
 builder.Services.AddDbContext<InvestContext>(

@@ -1,7 +1,5 @@
-using Invest.Persistence;
 using Invest.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Invest.Persistence.Context;
 using Invest.Application.Contratos;
 
 namespace Invest.API.Controllers;

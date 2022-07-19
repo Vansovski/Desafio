@@ -6,7 +6,7 @@ namespace Invest.Domain
 
         public int CotistaId { get; set; }
 
-        public Cotista Cotista { get; set; }
+        public Cotista? Cotista { get; set; }
         
         public DateTime DataOperacao { get; set; }
 
