@@ -1,9 +1,8 @@
 # Desafio Trinus
 
-<h2 align="center">Projeto de Controle de Cotistas de Compra e Venda de Cotas</h2>
+<h2 align="center">Projeto de Controle de Cotistas e de Compra e Venda de Cotas</h2>
 <br>
 <br>
-<h3>Projeto em Construção</h3>
 <p>O projeto disponibiliza o serviço de Back-End da ação PORT11</p>
 <hr>
 
