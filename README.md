@@ -20,6 +20,8 @@
   <br>
   <a href="#Postman"> Postman </a>
   <br>
+  <a href="#Banco de dados"> Postman </a>
+  <br>
 </p>
 
 
@@ -28,7 +30,7 @@
 A API foi desenvolvida com ASP.NET FrameWork na versão 6.0.300, Entity FrameWork Core versão 6.0.5.
 </p>
 <p>
-Para representação do Banco de Dados foi utilizado SQLite.
+Para representação do Banco de Dados foi utilizado SQLite, a abordagem utilizada foi Code First.
 </p>
 <p>
 A documentação da API está disponivel também pelo Swagger.
@@ -107,5 +109,14 @@ Para inicializar a aplicação faça o git clone na pasta desejada. Depois naveg
 <div>
   <img alt="Readme" title="Postman1" src="/Image/GETCotistasPostman.png">
   <img alt="Readme" title="Postman2" src="/Image/POSTOperacaoPostaman.png">
+</div>
+</p>
+
+# Banco de dados
+<p>
+<div>
+  <img alt="Readme" title="SQLite1" src="/Image/BDSQLite.png">
+  <img alt="Readme" title="SQLite2" src="/Image/TabelaCotistas.png">
+  <img alt="Readme" title="SQLite3" src="/Image/TabelaOperacoes.png">
 </div>
 </p>
