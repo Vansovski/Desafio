@@ -45,6 +45,8 @@ A documentação da API está disponivel tambpelo Swagger.
   <li>Comunicação com BD -->Invest.Persistence</li>
 </ul>
 
+<img alt="Readme" title="Swagger1" src="/Image/camadas.png">
+
 # EndPoints da API
 A URL base vai depender das disponibilidade de porta em tempo de execução, por exemplo baseURL = https://localhost:7026.
 
