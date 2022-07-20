@@ -83,9 +83,16 @@ Para inicializar a aplicação faça o git clone na pasta desejada. Depois naveg
 # Swagger
 <p>
 <div>
-  <img alt="Readme" title="Swagger" src="/Image/ResumoSwagger.png">
-  <img alt="Readme" title="Swagger" src="/Image/MetodosSwagger.png">
+  <img alt="Readme" title="Swagger1" src="/Image/ResumoSwagger.png">
+  <img alt="Readme" title="Swagger2" src="/Image/MetodosSwagger.png">
+  <img alt="Readme" title="Swagger2" src="/Image/CotistasSwagger.png">
 </div>
 </p>
 
 # Postman
+<p>
+<div>
+  <img alt="Readme" title="Postman1" src="/Image/GETCotistasPostman.png">
+  <img alt="Readme" title="Postman2" src="/Image/POSTOperacaoPostaman.png">
+</div>
+</p>
