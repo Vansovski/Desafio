@@ -81,5 +81,11 @@ Para inicializar a aplicação faça o git clone na pasta desejada. Depois naveg
 
 
 # Swagger
+<p>
+<div>
+  <img alt="Readme" title="Swagger" src="/Image/ResumoSwagger.png">
+  <img alt="Readme" title="Swagger" src="/Image/MetodosSwagger.png">
+</div>
+</p>
 
 # Postman
