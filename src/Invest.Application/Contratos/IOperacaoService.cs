@@ -13,5 +13,8 @@ namespace Invest.Application.Contratos
 
         //Obtem Operacao pelo Id 
         Task<OperacaoConsultaDto> GetOperacaoByIdAsync(int OperacaoId);
+
+        //Calculo do valor da Cota ação PORT11
+        double valorCota(DateTime data);
     }
 }

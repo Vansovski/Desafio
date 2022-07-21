@@ -33,8 +33,7 @@ A API foi desenvolvida com ASP.NET FrameWork na versão 6.0.300, Entity FrameWor
 Para representação do Banco de Dados foi utilizado SQLite, a abordagem utilizada foi Code First.
 </p>
 <p>
-A documentação da API está disponivel também pelo Swagger.
-</p>
+A documentação da API está disponivel também pelo Swagger, basta entrar na <a href="#EndPoints da API">url base</a> seguido de "/swagger".
 
 
 # Arquitetura
@@ -49,8 +48,37 @@ A documentação da API está disponivel também pelo Swagger.
 
 <img alt="Readme" title="Swagger1" src="/Image/camadas.png">
 
+<br>
+<p>Esta divisão faz a separação de responsabilidades e funcionalidades entre as camada, facilitando a escalabilidade da aplicação.</p>
+
+<br>
+<h3>Invest.API<h3>
+<p>
+Temos as rotas fornecidas pelas Controllers, CotistaController e OperacoesController. Esta camada tem acesso apenas a camada de aplicação (Invest.Application) dessa forma o dominio fica seguro e os inputs e outputs são passados pelos DTOs.
+</p>
+
+<p>
+As Controllers utilizam injeção de depencia, por meio das interfaces da camada de aplicação, para ter acesso as funcionalidades
+</p>
+<br>
+<h3>Invest.Application<h3>
+<p>
+Nesta camada temos todos os serviços que as Controllers necessitam, por meio da implementação das interfaces de serviço. Esta camada faz comunição entre API e a camada de persistencia para as operações de busca e registro.
+</p>
+<br>
+<h3>Invest.Domain<h3>
+<p>
+Camada responsável por modelar as entidades do dominio.
+</p>
+<br>
+<h3>Invest.Persistence<h3>
+<p>
+Camada que faz de fato as operções no Banco de Dados. É também responsável por modelar as tabelas no Banco de Dados.
+</p>
+<br>
+
 # EndPoints da API
-A URL base vai depender das disponibilidade de porta em tempo de execução, por exemplo baseURL = https://localhost:7026.
+A URL base vai depender da disponibilidade de porta em tempo de execução, seguindo as <a #Instruções"> instruções </a>, por exemplo baseURL = https://localhost:7026.
 
 <p>Para Cotista temos:</p>
 <ul>

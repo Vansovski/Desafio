@@ -72,6 +72,13 @@ public class OperacaoController : ControllerBase
             //Insere a Operacao
             var _operacao = await _operacaoService.AddOperacao(operacaoRegister);
 
+            //Retorno de Venda sem saldo de cotas
+            if(operacaoRegister.TipoOperacao == 1 && _operacao == null)
+            {
+                //Retorno de saldo
+                return BadRequest(new {Message = "Saldo Cotas insuficiente para venda!"});
+            }
+
             //verifica se houve algum erro ao registrar a Operação
             if(_operacao == null) return BadRequest(new {Message = "Erro ao Adicionar Operação, Cotista Inválido!"});
 

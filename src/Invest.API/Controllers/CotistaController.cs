@@ -1,5 +1,3 @@
-using Invest.Persistence;
-using Invest.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Invest.Application.Contratos;
 using Invest.Application.DTOS;
@@ -69,15 +67,8 @@ public class CotistaController : ControllerBase
     {
         try
         {
-            //Mapeamento de cmapos 
-            var _cotista = new Cotista {
-                Nome = cotista.Nome,
-                DataNascimento = cotista.DataNascimento,
-                Cpf = cotista.Cpf
-            };
-            
             //Insere o Cotista
-            var cotistaRetorno = await _cotistaService.AddCotista(_cotista);
+            var cotistaRetorno = await _cotistaService.AddCotista(cotista);
 
             //verifica se houve algum erro ao registrar Cotista
             if(cotistaRetorno == null) return BadRequest("Erro ao Registrar Cotista, CPF já cadstrado");

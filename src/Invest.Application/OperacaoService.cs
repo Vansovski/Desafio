@@ -9,12 +9,15 @@ namespace Invest.Application
     {
          //Injeção de depencia 
         private readonly IOperacaoPersistence _operacaoPersistence;
+        private readonly ICotistaPersistence _cotistaPersistence;
         private readonly ICotistaService _cotistaService;
         //Construtor do serviço de Cotistas 
         public OperacaoService(IOperacaoPersistence operacaoPersistence, 
+                               ICotistaPersistence cotistaPersistence,
                                ICotistaService cotistaService)
         {
             _operacaoPersistence = operacaoPersistence;
+            _cotistaPersistence = cotistaPersistence;
             _cotistaService = cotistaService;
         }
         public async Task<OperacaoConsultaDto> AddOperacao(OperacaoRegisterDto operacaoRegister)
@@ -22,11 +25,24 @@ namespace Invest.Application
             try
             {
                 //Verifica se Cotista existe para inserir operacao
-                var cotista = await _cotistaService.GetCotistaByIdAsync(operacaoRegister.CotistaId);
+                var cotista = await _cotistaPersistence.GetCotistaByIdAsync(operacaoRegister.CotistaId);
                 if(cotista == null) return null;
-
+                
                 //variável critica a ser processada 
                 var dataAtual = DateTime.Now;
+
+                //Se for operção de venda 1 verifica se existe saldo 
+                if(operacaoRegister.TipoOperacao == 1)
+                {
+                    //Quantidade de Cotas disponivel 
+                    var saldoCotas = _cotistaService.SaldoCotas(cotista);
+                    if(operacaoRegister.Cotas > saldoCotas)
+                    {
+                        //Saldo de cotas insuficiente para venda
+                        return null;
+                    }
+                }
+
                 //Mapeamento da Operação
                 var operacao = new Operacao{
                     CotistaId = operacaoRegister.CotistaId,

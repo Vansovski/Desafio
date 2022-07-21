@@ -16,10 +16,16 @@ namespace Invest.Application
         }
 
         //Registra Cotista
-        public async Task<CotistaConsultaDto> AddCotista(Cotista cotista)
+        public async Task<CotistaConsultaDto> AddCotista(CotistaRegisterDto cotistaRegister)
         {
             try
             {
+                 //Mapeamento de cmapos 
+                var cotista = new Cotista {
+                Nome = cotistaRegister.Nome,
+                DataNascimento = cotistaRegister.DataNascimento,
+                Cpf = cotistaRegister.Cpf
+                };
                 //Verifica se o Cotista já existe 
                 var cotistaExiste = await _cotistaPersistence.GetCotistaByCpfAsync(cotista.Cpf);
                 if(cotistaExiste != null) return null;
@@ -61,7 +67,7 @@ namespace Invest.Application
                         Nome = item.Nome,
                         DataNascimento = item.DataNascimento,
                         Cpf = item.Cpf,
-                        QtdCotas = SaldoCotas(item.Operacoes)
+                        QtdCotas = SaldoCotas(item)
                     });
                 }
 
@@ -91,7 +97,7 @@ namespace Invest.Application
                     Nome = cotista.Nome,
                     DataNascimento = cotista.DataNascimento,
                     Cpf = cotista.Cpf,
-                    QtdCotas = SaldoCotas(cotista.Operacoes)
+                    QtdCotas = SaldoCotas(cotista)
                     };
 
                 //Retorna cotista do Fundo 
@@ -105,8 +111,10 @@ namespace Invest.Application
 
 
         //Calcula Saldo de Cotas dado conjunto de Operções
-        public int SaldoCotas(IEnumerable<Operacao> operacoes)
+        public int SaldoCotas(Cotista cotista)
         {
+            //Obtem operções do Cotista
+            var operacoes =  cotista.Operacoes;
             if(operacoes.Count() == 0)
             {
                 return 0;
@@ -116,7 +124,8 @@ namespace Invest.Application
             //Soma Compra Subtrai Venda 
             foreach(Operacao operacao in operacoes )
             {
-                saldo = (operacao.TipoOperacao == 1)? saldo + operacao.QtdCotas
+                //0 significa compra 1 venda
+                saldo = (operacao.TipoOperacao == 0)? saldo + operacao.QtdCotas
                                                     : saldo - operacao.QtdCotas; 
 
             }
