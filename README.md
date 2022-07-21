@@ -52,7 +52,7 @@ A documentação da API está disponivel também pelo Swagger, basta entrar na <
 <p>Esta divisão faz a separação de responsabilidades e funcionalidades entre as camada, facilitando a escalabilidade da aplicação.</p>
 
 <br>
-<h3>Invest.API<h3>
+<h3>Invest.API</h3>
 <p>
 Temos as rotas fornecidas pelas Controllers, CotistaController e OperacoesController. Esta camada tem acesso apenas a camada de aplicação (Invest.Application) dessa forma o dominio fica seguro e os inputs e outputs são passados pelos DTOs.
 </p>
@@ -61,17 +61,17 @@ Temos as rotas fornecidas pelas Controllers, CotistaController e OperacoesContro
 As Controllers utilizam injeção de depencia, por meio das interfaces da camada de aplicação, para ter acesso as funcionalidades
 </p>
 <br>
-<h3>Invest.Application<h3>
+<h3>Invest.Application</h3>
 <p>
 Nesta camada temos todos os serviços que as Controllers necessitam, por meio da implementação das interfaces de serviço. Esta camada faz comunição entre API e a camada de persistencia para as operações de busca e registro.
 </p>
 <br>
-<h3>Invest.Domain<h3>
+<h3>Invest.Domain</h3>
 <p>
 Camada responsável por modelar as entidades do dominio.
 </p>
 <br>
-<h3>Invest.Persistence<h3>
+<h3>Invest.Persistence</h3>
 <p>
 Camada que faz de fato as operções no Banco de Dados. É também responsável por modelar as tabelas no Banco de Dados.
 </p>
