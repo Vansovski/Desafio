@@ -1,4 +1,4 @@
-# Desafio Trinus
+# API
 
 <h2 align="center">Projeto de Controle de Cotistas e de Compra e Venda de Cotas</h2>
 <br>
