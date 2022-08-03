@@ -20,11 +20,11 @@ namespace Invest.Application
         {
             try
             {
-                 //Mapeamento de cmapos 
+                //Mapeamento de campos 
                 var cotista = new Cotista {
-                Nome = cotistaRegister.Nome,
-                DataNascimento = cotistaRegister.DataNascimento,
-                Cpf = cotistaRegister.Cpf
+                    Nome = cotistaRegister.Nome,
+                    DataNascimento = cotistaRegister.DataNascimento?? DateTime.Now,
+                    Cpf = cotistaRegister.Cpf
                 };
                 //Verifica se o Cotista já existe 
                 var cotistaExiste = await _cotistaPersistence.GetCotistaByCpfAsync(cotista.Cpf);

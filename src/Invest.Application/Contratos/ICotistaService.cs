@@ -10,6 +10,7 @@ namespace Invest.Application.Contratos
          
         //Obtem todos os Cotistas
         Task<List<CotistaConsultaDto>> GetAllCotistasAsync();
+        
         //Obtem Cotista pelo Id 
         Task<CotistaConsultaDto> GetCotistaByIdAsync(int CotaId);
 

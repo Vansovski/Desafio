@@ -25,7 +25,7 @@ namespace Invest.Application
             try
             {
                 //Verifica se Cotista existe para inserir operacao
-                var cotista = await _cotistaPersistence.GetCotistaByIdAsync(operacaoRegister.CotistaId);
+                var cotista = await _cotistaPersistence.GetCotistaByIdAsync(operacaoRegister.CotistaId??0);
                 if(cotista == null) return null;
                 
                 //variável critica a ser processada 
@@ -45,11 +45,11 @@ namespace Invest.Application
 
                 //Mapeamento da Operação
                 var operacao = new Operacao{
-                    CotistaId = operacaoRegister.CotistaId,
+                    CotistaId = operacaoRegister.CotistaId??0,
                     //Formato da data
                     DataOperacao = dataAtual.ToString("yyyy-MM-ddTHH:mm:ss.fffffff"),
-                    TipoOperacao = operacaoRegister.TipoOperacao,
-                    QtdCotas = operacaoRegister.Cotas,
+                    TipoOperacao = operacaoRegister.TipoOperacao??0,
+                    QtdCotas = operacaoRegister.Cotas??0,
                     ValorCota = valorCota(dataAtual)
                 };
                 
