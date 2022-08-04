@@ -8,7 +8,7 @@ namespace Invest.Application.DTOS
     
         public int CotistaId { get; set; }
 
-        public string DataOperacao { get; set; }
+        public string? DataOperacao { get; set; }
 
         public int Operacao { get; set; }
 

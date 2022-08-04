@@ -11,7 +11,7 @@ namespace Invest.Domain
 
         public Cotista? Cotista { get; set; }
         
-        public string DataOperacao { get; set; }
+        public string? DataOperacao { get; set; }
 
         [Required]
         public int TipoOperacao { get; set; }

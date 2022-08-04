@@ -16,19 +16,20 @@ namespace Invest.Application
         }
 
         //Registra Cotista
-        public async Task<CotistaConsultaDto> AddCotista(CotistaRegisterDto cotistaRegister)
+        public async Task<CotistaConsultaDto?> AddCotista(CotistaRegisterDto cotistaRegister)
         {
             try
             {
+                //Verifica se o Cotista já existe 
+                var cotistaExiste = await _cotistaPersistence.GetCotistaByCpfAsync(cotistaRegister.Cpf ?? "");
+                if(cotistaExiste != null) return null;
+                
                 //Mapeamento de campos 
                 var cotista = new Cotista {
                     Nome = cotistaRegister.Nome,
                     DataNascimento = cotistaRegister.DataNascimento?? DateTime.Now,
                     Cpf = cotistaRegister.Cpf
                 };
-                //Verifica se o Cotista já existe 
-                var cotistaExiste = await _cotistaPersistence.GetCotistaByCpfAsync(cotista.Cpf);
-                if(cotistaExiste != null) return null;
 
                 //Adiciona Cotista
                 _cotistaPersistence.Add<Cotista>(cotista);
@@ -47,7 +48,7 @@ namespace Invest.Application
         }
 
         //Obtem todos os Cotistas com as informações de retorno e verifica saldo de Cotas
-        public async Task<List<CotistaConsultaDto>> GetAllCotistasAsync()
+        public async Task<List<CotistaConsultaDto>?> GetAllCotistasAsync()
         {
             try
             {
@@ -64,9 +65,9 @@ namespace Invest.Application
                     //Adiciona ao retorno 
                     cotistaRetorno.Add(new CotistaConsultaDto(){
                         Id = item.Id,
-                        Nome = item.Nome,
+                        Nome = item.Nome?? "",
                         DataNascimento = item.DataNascimento,
-                        Cpf = item.Cpf,
+                        Cpf = item.Cpf?? "",
                         QtdCotas = SaldoCotas(item)
                     });
                 }
@@ -81,7 +82,7 @@ namespace Invest.Application
             }
         }
 
-        public async Task<CotistaConsultaDto> GetCotistaByIdAsync(int CotaId)
+        public async Task<CotistaConsultaDto?> GetCotistaByIdAsync(int CotaId)
         {
             try
             {
@@ -94,9 +95,9 @@ namespace Invest.Application
                 //Retorno DTO do Cotista
                 CotistaConsultaDto _cotistaRet = new CotistaConsultaDto(){
                     Id = cotista.Id,
-                    Nome = cotista.Nome,
+                    Nome = cotista.Nome ?? "",
                     DataNascimento = cotista.DataNascimento,
-                    Cpf = cotista.Cpf,
+                    Cpf = cotista.Cpf?? "",
                     QtdCotas = SaldoCotas(cotista)
                     };
 
@@ -115,22 +116,24 @@ namespace Invest.Application
         {
             //Obtem operções do Cotista
             var operacoes =  cotista.Operacoes;
-            if(operacoes.Count() == 0)
+            if(operacoes != null)
             {
-                return 0;
-            }
-            //Saldo de cotas 
-            int saldo = 0;
-            //Soma Compra Subtrai Venda 
-            foreach(Operacao operacao in operacoes )
-            {
-                //0 significa compra 1 venda
-                saldo = (operacao.TipoOperacao == 0)? saldo + operacao.QtdCotas
-                                                    : saldo - operacao.QtdCotas; 
+                //Saldo de cotas 
+                int saldo = 0;
+                
+                //Soma Compra Subtrai Venda 
+                foreach(Operacao operacao in operacoes)
+                {
+                    //0 significa compra 1 venda
+                    saldo = (operacao.TipoOperacao == 0)? saldo + operacao.QtdCotas
+                                                        : saldo - operacao.QtdCotas; 
 
+                }
+                //Retorna saldo de Cotas 
+                return saldo;
             }
-            //Retorna saldo de Cotas 
-            return saldo;
+            //Senão tiver lista Retorna 0
+            return 0;
         }
     }
 }

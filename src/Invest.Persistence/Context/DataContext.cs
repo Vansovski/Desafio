@@ -12,8 +12,8 @@ namespace Invest.Persistence.Context
         }
 
         //Criação de tabelas no Banco de Dados
-        public DbSet<Cotista> Cotistas { get; set; }
-        public DbSet<Operacao> Operacoes { get; set; }
+        public DbSet<Cotista>? Cotistas { get; set; }
+        public DbSet<Operacao>? Operacoes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

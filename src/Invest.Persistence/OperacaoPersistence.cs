@@ -16,28 +16,30 @@ namespace Invest.Persistence
             _context = context;
         }
 
-        public async Task<Operacao[]> GetAllOperacoesAsync()
+        public async Task<Operacao[]?> GetAllOperacoesAsync()
         {
             //Query para obter todas as operções inclui o Cotista da operção
-            IQueryable<Operacao> query = _context.Operacoes;
+            IQueryable<Operacao>? query = _context.Operacoes;
 
             //Ordena pelo Id da Operção
-            query = query.OrderBy(op => op.Id);
+            query = query?.OrderBy(op => op.Id);
 
             //Retorna Array de Operções 
-            return await query.ToArrayAsync();
+            if(query != null) return await query.ToArrayAsync();
+            return null;
         }
 
-        public async Task<Operacao> GetOperacaoByIdAsync(int OperacaoId)
+        public async Task<Operacao?> GetOperacaoByIdAsync(int OperacaoId)
         {
             //Query para obter todas as operções inclui o Cotista da operção
-            IQueryable<Operacao> query = _context.Operacoes;
+            IQueryable<Operacao>? query = _context.Operacoes;
 
             //Obtem Operação pelo Id 
-            query = query.OrderBy(op => op.Id)
+            query = query?.OrderBy(op => op.Id)
                          .Where(op => op.Id == OperacaoId);
 
-            return await query.FirstOrDefaultAsync();
+            if(query != null) return await query.FirstOrDefaultAsync();
+            return null;
         }
     }
 }

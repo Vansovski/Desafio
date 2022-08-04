@@ -16,42 +16,47 @@ namespace Invest.Persistence
         {
             _context = context;
         }
-        public async Task<Cotista[]> GetAllCotistasAsync()
+        public async Task<Cotista[]?> GetAllCotistasAsync()
         {
             //Query para obter todos os Cotistas
-            IQueryable<Cotista> query = _context.Cotistas.Include(cotista => cotista.Operacoes);
+            IQueryable<Cotista>? query = _context.Cotistas?.Include(cotista => cotista.Operacoes);
 
 
             //Ordena pelo Id do Cotista
-            query = query.OrderBy(ct => ct.Id);
+            query = query?.OrderBy(ct => ct.Id);
 
             //Retorna todas os Cotistas 
-            return await query.ToArrayAsync();
+            if(query != null) return await query.ToArrayAsync();
+            return null;
         }
 
         //Obtem por Id
-        public async Task<Cotista> GetCotistaByIdAsync(int CotistaId)
+        public async Task<Cotista?> GetCotistaByIdAsync(int CotistaId)
         {
             //Query para obter todos os Cotistas
-            IQueryable<Cotista> query = _context.Cotistas.Include(cotista => cotista.Operacoes);
+            IQueryable<Cotista>? query = _context.Cotistas?.Include(cotista => cotista.Operacoes);
 
 
             //Ordena pelo Id do Cotista
-            query = query.OrderBy(ct => ct.Id)
+            query = query?.OrderBy(ct => ct.Id)
                          .Where(ct => ct.Id == CotistaId);
-
-            return await query.FirstOrDefaultAsync();
+            if(query != null)
+            {
+                return await query.FirstOrDefaultAsync();
+            }
+            return null;
         }
         
         //Obtem por CPF
-        public async Task<Cotista> GetCotistaByCpfAsync(string cpf)
+        public async Task<Cotista?> GetCotistaByCpfAsync(string cpf)
         {
             //Query para obter todos os Cotistas
-            IQueryable<Cotista> query = _context.Cotistas.
+            IQueryable<Cotista>? query = _context.Cotistas?.
                                             OrderBy(ct => ct.Id)
                                             .Where(ct => ct.Cpf == cpf);
 
-            return await query.FirstOrDefaultAsync();
+            if(query != null) return await query.FirstOrDefaultAsync();
+            return null;
         }
 
 

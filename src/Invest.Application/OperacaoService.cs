@@ -20,7 +20,7 @@ namespace Invest.Application
             _cotistaPersistence = cotistaPersistence;
             _cotistaService = cotistaService;
         }
-        public async Task<OperacaoConsultaDto> AddOperacao(OperacaoRegisterDto operacaoRegister)
+        public async Task<OperacaoConsultaDto?> AddOperacao(OperacaoRegisterDto operacaoRegister)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace Invest.Application
             }
         }
 
-        public async Task<List<OperacaoConsultaDto>> GetAllOperacoesAsync()
+        public async Task<List<OperacaoConsultaDto>?> GetAllOperacoesAsync()
         {
             try
             {
@@ -104,7 +104,7 @@ namespace Invest.Application
             }
         }
 
-        public async Task<OperacaoConsultaDto> GetOperacaoByIdAsync(int OperacaoId)
+        public async Task<OperacaoConsultaDto?> GetOperacaoByIdAsync(int OperacaoId)
         {
             try
             {
