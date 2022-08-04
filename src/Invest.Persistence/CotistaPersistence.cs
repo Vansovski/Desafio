@@ -7,15 +7,10 @@ namespace Invest.Persistence
 {
     public class CotistaPersistence : Persistence, ICotistaPersistence
     {
-
-        //Injeção de dependecia InvestContext
-        private readonly InvestContext _context;
-
-        //Contrutor da API de Cotistas, 
-        public CotistaPersistence(InvestContext context): base(context)
+        public CotistaPersistence(InvestContext context) : base(context)
         {
-            _context = context;
         }
+
         public async Task<Cotista[]?> GetAllCotistasAsync()
         {
             //Query para obter todos os Cotistas
@@ -58,7 +53,5 @@ namespace Invest.Persistence
             if(query != null) return await query.FirstOrDefaultAsync();
             return null;
         }
-
-
     }
 }

@@ -7,7 +7,7 @@ namespace Invest.Persistence
     {
 
         //Injeção de dependecia InvestContext
-        private readonly InvestContext _context;
+        protected readonly InvestContext _context;
 
         //Contrutor da API de Cotistas, 
         public Persistence(InvestContext context)
