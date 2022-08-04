@@ -6,6 +6,7 @@ using Invest.Persistence.Context;
 using Invest.Persistence.Contratos;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -30,6 +31,8 @@ builder.Services.AddScoped<ICotistaPersistence,CotistaPersistence>(); //Cotista
 builder.Services.AddScoped<ICotistaService,CotistaService>(); //Cotista
 builder.Services.AddScoped<IOperacaoService,OperacaoService>(); //Operações
 
+//Mapeamento 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Invest.Application.Contratos;
 using Invest.Application.DTOS;
 using Invest.Domain;
@@ -11,19 +12,26 @@ namespace Invest.Application
         private readonly IOperacaoPersistence _operacaoPersistence;
         private readonly ICotistaPersistence _cotistaPersistence;
         private readonly ICotistaService _cotistaService;
+        private readonly IMapper _mapper;
+
         //Construtor do serviço de Cotistas 
         public OperacaoService(IOperacaoPersistence operacaoPersistence, 
                                ICotistaPersistence cotistaPersistence,
-                               ICotistaService cotistaService)
+                               ICotistaService cotistaService,
+                               IMapper mapper)
         {
             _operacaoPersistence = operacaoPersistence;
             _cotistaPersistence = cotistaPersistence;
             _cotistaService = cotistaService;
+            _mapper = mapper;
         }
         public async Task<OperacaoConsultaDto?> AddOperacao(OperacaoRegisterDto operacaoRegister)
         {
             try
             {
+                //variável critica a ser processada 
+                var dataAtual = DateTime.Now;
+
                 //Verifica se Cotista existe para inserir operacao
                 var cotista = await _cotistaPersistence.GetCotistaByIdAsync(operacaoRegister.CotistaId??0);
                 if(cotista == null) 
@@ -32,9 +40,6 @@ namespace Invest.Application
                     throw new InvalidOperationException("CotistaInvalido");
                 }
                 
-                //variável critica a ser processada 
-                var dataAtual = DateTime.Now;
-
                 //Se for operção de venda 1 verifica se existe saldo 
                 if(operacaoRegister.TipoOperacao == 1)
                 {
@@ -48,14 +53,9 @@ namespace Invest.Application
                 }
 
                 //Mapeamento da Operação
-                var operacao = new Operacao{
-                    CotistaId = operacaoRegister.CotistaId??0,
-                    //Formato da data
-                    DataOperacao = dataAtual.ToString("yyyy-MM-ddTHH:mm:ss.fffffff"),
-                    TipoOperacao = operacaoRegister.TipoOperacao??0,
-                    QtdCotas = operacaoRegister.Cotas??0,
-                    ValorCota = valorCota(dataAtual)
-                };
+                var operacao = _mapper.Map<Operacao>(operacaoRegister);
+                operacao.ValorCota = valorCota(dataAtual);
+                operacao.DataOperacao = dataAtual.ToString("yyyy-MM-ddTHH:mm:ss.fffffff");
                 
                 //Adicona nova Operação 
                 _operacaoPersistence.Add<Operacao>(operacao);
@@ -74,7 +74,7 @@ namespace Invest.Application
             }
         }
 
-        public async Task<List<OperacaoConsultaDto>?> GetAllOperacoesAsync()
+        public async Task<OperacaoConsultaDto[]?> GetAllOperacoesAsync()
         {
             try
             {
@@ -82,22 +82,8 @@ namespace Invest.Application
                 //Verifica conteudo do retorno 
                 if(operacoes == null) return null;
 
-                //Lista de OperaçõesDto 
-                List<OperacaoConsultaDto> _operacoes = new List<OperacaoConsultaDto>();
-
-                //Mapeamento de Operações
-                foreach(var op in operacoes)
-                {
-                    //adiciona elemento e faz mapeamento para DTO 
-                    _operacoes.Add(new OperacaoConsultaDto{
-                        Id = op.Id,
-                        CotistaId = op.CotistaId,
-                        DataOperacao = op.DataOperacao,
-                        Operacao = op.TipoOperacao,
-                        Cotas = op.QtdCotas,
-                        valorCota = op.ValorCota
-                    });
-                }
+                //Lista de OperaçõesDto Mapeado
+                var _operacoes = _mapper.Map<OperacaoConsultaDto[]>(operacoes);
 
                 //Retorna todas as operações do Fundo 
                 return _operacoes;
@@ -119,14 +105,7 @@ namespace Invest.Application
                 if(op == null) return null;
 
                 //Mapeamento para DTO
-                var _operacaoDto = new OperacaoConsultaDto{
-                        Id = op.Id,
-                        CotistaId = op.CotistaId,
-                        DataOperacao = op.DataOperacao,
-                        Operacao = op.TipoOperacao,
-                        Cotas = op.QtdCotas,
-                        valorCota = op.ValorCota
-                    };
+                var _operacaoDto = _mapper.Map<OperacaoConsultaDto>(op);
                 
                 //Retorna operação do Fundo 
                 return _operacaoDto;

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <ProjectReference Include="..\Invest.Domain\Invest.Domain.csproj" />
     <ProjectReference Include="..\Invest.Persistence\Invest.Persistence.csproj" />
   </ItemGroup>

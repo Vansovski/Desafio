@@ -1,3 +1,4 @@
+using AutoMapper;
 using Invest.Application.Contratos;
 using Invest.Application.DTOS;
 using Invest.Domain;
@@ -9,10 +10,14 @@ namespace Invest.Application
     {
         //Injeção de depencia 
         private readonly ICotistaPersistence _cotistaPersistence;
+        private readonly IMapper _mapper;
+
         //Construtor do serviço de Cotistas 
-        public CotistaService(ICotistaPersistence cotistaPersistence)
+        public CotistaService(ICotistaPersistence cotistaPersistence,
+                              IMapper mapper)
         {
             _cotistaPersistence = cotistaPersistence;
+            _mapper = mapper;
         }
 
         //Registra Cotista
@@ -22,14 +27,13 @@ namespace Invest.Application
             {
                 //Verifica se o Cotista já existe 
                 var cotistaExiste = await _cotistaPersistence.GetCotistaByCpfAsync(cotistaRegister.Cpf ?? "");
-                if(cotistaExiste != null) return null;
+                if(cotistaExiste != null)
+                {
+                    throw new  Exception("Já existe cotista com esse CPF!");
+                }
                 
                 //Mapeamento de campos 
-                var cotista = new Cotista {
-                    Nome = cotistaRegister.Nome,
-                    DataNascimento = cotistaRegister.DataNascimento?? DateTime.Now,
-                    Cpf = cotistaRegister.Cpf
-                };
+                var cotista = _mapper.Map<Cotista>(cotistaRegister);
 
                 //Adiciona Cotista
                 _cotistaPersistence.Add<Cotista>(cotista);
@@ -62,14 +66,10 @@ namespace Invest.Application
 
                 foreach (var item in cotistas)
                 {
+                    var mapeamentoDTO = _mapper.Map<CotistaConsultaDto>(item);
+                    mapeamentoDTO.QtdCotas = SaldoCotas(item);
                     //Adiciona ao retorno 
-                    cotistaRetorno.Add(new CotistaConsultaDto(){
-                        Id = item.Id,
-                        Nome = item.Nome?? "",
-                        DataNascimento = item.DataNascimento,
-                        Cpf = item.Cpf?? "",
-                        QtdCotas = SaldoCotas(item)
-                    });
+                    cotistaRetorno.Add(mapeamentoDTO);
                 }
 
                 //Retorna todos os cotistas do Fundo 
@@ -91,15 +91,12 @@ namespace Invest.Application
                 
                 //Verifica conteudo do retorno 
                 if(cotista == null) return null;
+                
+                //Mapeamento do DTO
+                var _cotistaRet = _mapper.Map<CotistaConsultaDto>(cotista);
 
-                //Retorno DTO do Cotista
-                CotistaConsultaDto _cotistaRet = new CotistaConsultaDto(){
-                    Id = cotista.Id,
-                    Nome = cotista.Nome ?? "",
-                    DataNascimento = cotista.DataNascimento,
-                    Cpf = cotista.Cpf?? "",
-                    QtdCotas = SaldoCotas(cotista)
-                    };
+                //saldo de Cotas
+                _cotistaRet.QtdCotas = SaldoCotas(cotista);
 
                 //Retorna cotista do Fundo 
                 return _cotistaRet;
@@ -109,7 +106,6 @@ namespace Invest.Application
                 throw new Exception(ex.Message);
             }
         }
-
 
         //Calcula Saldo de Cotas dado conjunto de Operções
         public int SaldoCotas(Cotista cotista)

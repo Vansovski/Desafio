@@ -9,7 +9,7 @@ namespace Invest.Application.Contratos
         Task<OperacaoConsultaDto?> AddOperacao(OperacaoRegisterDto operacaoRegister);
 
         //Obtem todas as Operções
-        Task<List<OperacaoConsultaDto>?> GetAllOperacoesAsync();
+        Task<OperacaoConsultaDto[]?> GetAllOperacoesAsync();
 
         //Obtem Operacao pelo Id 
         Task<OperacaoConsultaDto?> GetOperacaoByIdAsync(int OperacaoId);
