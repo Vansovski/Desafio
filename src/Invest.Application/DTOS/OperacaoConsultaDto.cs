@@ -10,9 +10,9 @@ namespace Invest.Application.DTOS
 
         public string? DataOperacao { get; set; }
 
-        public int Operacao { get; set; }
+        public int TipoOperacao { get; set; }
 
-        public int Cotas { get; set; }
+        public int QtdCotas { get; set; }
 
         public double valorCota { get; set; }
     }

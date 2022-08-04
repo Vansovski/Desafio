@@ -45,7 +45,7 @@ namespace Invest.Application
                 {
                     //Quantidade de Cotas disponivel 
                     var saldoCotas = _cotistaService.SaldoCotas(cotista);
-                    if(operacaoRegister.Cotas > saldoCotas)
+                    if(operacaoRegister.QtdCotas > saldoCotas)
                     {
                         //Saldo de cotas insuficiente para venda
                         throw new InvalidOperationException("SaldoInsuficiente");

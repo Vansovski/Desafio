@@ -14,7 +14,6 @@ namespace Invest.Application.DTOS
         
         [Required(ErrorMessage ="Quantidade de cotas de ser um numero inteiro, maior que 0!")]
         [Range(1,1000000, ErrorMessage="Limite de Cotas numa operção de 1 à 1.000.000")]
-        public int? Cotas { get; set; }
-        
+        public int? QtdCotas { get; set; }
     }
 }
