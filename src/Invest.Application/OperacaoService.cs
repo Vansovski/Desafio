@@ -26,7 +26,11 @@ namespace Invest.Application
             {
                 //Verifica se Cotista existe para inserir operacao
                 var cotista = await _cotistaPersistence.GetCotistaByIdAsync(operacaoRegister.CotistaId??0);
-                if(cotista == null) return null;
+                if(cotista == null) 
+                {
+                    //Cotista Invalido
+                    throw new InvalidOperationException("CotistaInvalido");
+                }
                 
                 //variável critica a ser processada 
                 var dataAtual = DateTime.Now;
@@ -39,7 +43,7 @@ namespace Invest.Application
                     if(operacaoRegister.Cotas > saldoCotas)
                     {
                         //Saldo de cotas insuficiente para venda
-                        return null;
+                        throw new InvalidOperationException("SaldoInsuficiente");
                     }
                 }
 

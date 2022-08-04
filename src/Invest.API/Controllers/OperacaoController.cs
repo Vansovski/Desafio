@@ -39,7 +39,6 @@ public class OperacaoController : ControllerBase
         }
     }
 
-
     //Obtem operação pelo Id
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
@@ -72,21 +71,28 @@ public class OperacaoController : ControllerBase
             //Insere a Operacao
             var _operacao = await _operacaoService.AddOperacao(operacaoRegister);
 
-            //Retorno de Venda sem saldo de cotas
-            if(operacaoRegister.TipoOperacao == 1 && _operacao == null)
-            {
-                //Retorno de saldo
-                return BadRequest(new {Message = "Saldo Cotas insuficiente para venda!"});
-            }
-
             //verifica se houve algum erro ao registrar a Operação
-            if(_operacao == null) return BadRequest(new {Message = "Erro ao Adicionar Operação, Cotista Inválido!"});
+            if(_operacao == null) return BadRequest(new {Message = "Erro ao Adicionar Operação!"});
 
             return Ok(_operacao);
 
         }
         catch (System.Exception ex)
         {
+            //Cotista Invalido
+            if(ex.Message == "CotistaInvalido")
+            {
+                //Retorno de saldo
+                return BadRequest(new {Message = "Erro ao Adicionar Operação, Cotista Inválido!"});
+            }
+
+            //Saldo Insuficiente
+            if(ex.Message == "SaldoInsuficiente")
+            {
+                //Retorno de saldo
+                return BadRequest(new {Message = "Saldo Cotas insuficiente para venda!"});
+            }
+
             //Tratamento de exceção
             return this.StatusCode(StatusCodes.Status500InternalServerError,
                                         $"Erro ao adcionar Operação. Erro {ex}");
